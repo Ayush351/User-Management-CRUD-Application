@@ -35,7 +35,7 @@ export default function EditUser() {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(10px)', borderRadius: '10px', padding: '20px' }}>
       <div className="row">
         <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
           <h2 className="text-center m-4">Edit User</h2>
