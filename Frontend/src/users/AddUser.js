@@ -24,9 +24,9 @@ export default function AddUser() {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ marginTop: "50px", padding: "20px" }}>
       <div className="row">
-        <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+        <div className="col-md-6 offset-md-3" style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(10px)', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)', padding: '20px' }}>
           <h2 className="text-center m-4">Register User</h2>
 
           <form onSubmit={(e) => onSubmit(e)}>
