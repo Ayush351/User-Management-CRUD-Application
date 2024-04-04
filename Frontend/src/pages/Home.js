@@ -1,73 +1,77 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import { Container, Card, CardContent, Typography, Button, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 export default function Home() {
   const [users, setUsers] = useState([]);
-
-  const { id } = useParams();
 
   useEffect(() => {
     loadUsers();
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get("http://localhost:8080/users");
-    setUsers(result.data);
+    try {
+      const result = await axios.get("http://localhost:8080/users");
+      setUsers(result.data);
+    } catch (error) {
+      console.error("Error loading users:", error);
+    }
   };
 
   const deleteUser = async (id) => {
-    await axios.delete(`http://localhost:8080/user/${id}`);
-    loadUsers();
+    try {
+      await axios.delete(`http://localhost:8080/user/${id}`);
+      loadUsers();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   return (
-    <div className="container">
-      <div className="py-4">
-        <table className="table border shadow">
-          <thead>
-            <tr>
-              <th scope="col">S.N</th>
-              <th scope="col">Name</th>
-              <th scope="col">Username</th>
-              <th scope="col">Email</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr>
-                <th scope="row" key={index}>
-                  {index + 1}
-                </th>
-                <td>{user.name}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>
-                  <Link
-                    className="btn btn-primary mx-2"
-                    to={`/viewuser/${user.id}`}
-                  >
-                    View
-                  </Link>
-                  <Link
-                    className="btn btn-outline-primary mx-2"
-                    to={`/edituser/${user.id}`}
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    className="btn btn-danger mx-2"
-                    onClick={() => deleteUser(user.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '95vh' }}>
+      <Card style={{ marginTop: 10, background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(10px)', borderRadius: '10px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom align="center">User List</Typography>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Username</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users.map((user, index) => (
+                <TableRow key={index}>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.username}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    <Link to={`/viewuser/${user.id}`} style={{ textDecoration: 'none', marginRight: 10 }}>
+                      <Button variant="outlined" color="primary" startIcon={<VisibilityIcon />}>
+                        View
+                      </Button>
+                    </Link>
+                    <Link to={`/edituser/${user.id}`} style={{ textDecoration: 'none', marginRight: 10 }}>
+                      <Button variant="outlined" color="primary" startIcon={<EditIcon />}>
+                        Edit
+                      </Button>
+                    </Link>
+                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />} onClick={() => deleteUser(user.id)}>
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }
